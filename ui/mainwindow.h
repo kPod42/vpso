@@ -4,6 +4,7 @@
 
 #include "../3rdparty/qcustomplot.h"                 // ← путь ищется через INCLUDEPATH
 #include "core/SegmentMonteCarlo.h"
+#include "data/experimentrepository.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,6 +16,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
+    std::unique_ptr<ExperimentRepository> repo;
 
 private slots:
     void on_btnStart_clicked();

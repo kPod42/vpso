@@ -1,5 +1,7 @@
 #include "mainwindow.h"
+#include "qsqlerror.h"
 #include "ui_mainwindow.h"
+#include "data/databasemanager.h"
 
 #include <cmath>                 // std::sin / std::cos, если нужно
 #include <QVector>
@@ -12,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     initPlot();   // создаём circle, lim, gHits, gMisses
     buildFrame(); // первый «пустой» кадр
+    repo = std::make_unique<ExperimentRepository>();
 }
 
 /* ──────────── initPlot ──────────── */
@@ -55,8 +58,18 @@ void MainWindow::runSimulation()
     mc = std::make_unique<SegmentMonteCarlo>(mcParams);
     const double area = mc->run();
 
-    drawScene();                                       // ← а не drawPoints()
+    drawScene();
     ui->edtS->setText(tr("S ≈ %1").arg(area, 0, 'g', 10));
+
+    /* ---------- сохраняем результат ---------- */
+    Experiment e;
+    e.params = mcParams;
+    e.S_est  = area;
+    e.error  = 0;                      // если нет аналита – 0
+    e.ts     = QDateTime::currentDateTime();
+
+    if (!repo->insert(e))
+        qWarning() << "DB insert error:" << DatabaseManager::db().lastError();
 }
 
 /* ──────────── построение окружности + линии ──────────── */
