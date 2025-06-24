@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/databaseScripts/sql">
+        <file alias="init.sql">data/sql/init.sql</file>
+    </qresource>
+</RCC>
