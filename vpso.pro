@@ -1,10 +1,10 @@
 ############################################################################
-# vpso.pro – режим выбирается через CONFIG+=unit_tests                    #
+# vpso.pro – добавить CONFIG+=unit_tests для сборки модульных тестов      #
 ############################################################################
-CONFIG += c++17                # общий стандарт C++
-QT     += sql                  # sql нужен в любой сборке
+CONFIG += c++17
+QT     += sql                # БД нужна в любой сборке
 
-# ───── Общие исходники (core + DAO) ─────
+# ───── общие исходники (core + DAO) ─────
 CORE_SOURCES = \
     core/segmentmontecarlo.cpp \
     data/databasemanager.cpp    \
@@ -16,7 +16,8 @@ CORE_HEADERS = \
     data/databasemanager.h      \
     data/experimentrepository.h
 
-# ──────────────────────────── UNIT-TESTS ────────────────────────────────
+
+# ──────────────────────────  UNIT-TESTS  ────────────────────────────────
 contains(CONFIG, unit_tests) {
 
     message(*** Building UNIT-TESTS ***)
@@ -24,36 +25,58 @@ contains(CONFIG, unit_tests) {
     TEMPLATE = app
     TARGET   = vpso_tests
 
-    CONFIG  += testcase console   # console‐подсистема только тестам
-    QT      += testlib            # Qt Test
+    CONFIG  += testcase console
+    QT      += testlib
 
-    SOURCES += tests/core_tests.cpp \
-               $$CORE_SOURCES
-    HEADERS += $$CORE_HEADERS      # (можно сократить до файлов с Q_OBJECT)
+    SOURCES += tests/core_tests.cpp $$CORE_SOURCES
+    HEADERS += $$CORE_HEADERS       # достаточно заголовков с Q_OBJECT
 
-} else {                           # ───────── GUI-приложение ────────────
+} else {                             # ────────── GUI-приложение ──────────
 
     message(*** Building APPLICATION ***)
 
     TEMPLATE = app
     TARGET   = vpso
 
-    QT      += widgets printsupport            # charts больше не нужны
-    CONFIG  -= console            # убираем консольное окно под Windows
+    QT      += widgets printsupport
+    CONFIG  -= console               # без консольного окна под Windows
 
     # --- QCustomPlot ----------------------------------------------------
-    INCLUDEPATH += $$PWD/3rdparty           # где лежит .h
+    INCLUDEPATH += $$PWD/3rdparty
     SOURCES     += $$PWD/3rdparty/qcustomplot.cpp
     HEADERS     += $$PWD/3rdparty/qcustomplot.h
 
-    # ---- ваши исходники формы ----
-    SOURCES += main.cpp \
-               ui/mainwindow.cpp \
-               $$CORE_SOURCES
+    # --- ваши исходники UI ---------------------------------------------
+    SOURCES += \
+        main.cpp \
+        ui/mainwindow.cpp \
+        ui/analysiswindow.cpp \
+        $$CORE_SOURCES
 
-    HEADERS += ui/mainwindow.h \
-               $$CORE_HEADERS
+    HEADERS += \
+        ui/mainwindow.h \
+        ui/analysiswindow.h\         # собственный класс-обёртка, не ui_*.h \
+        ui/FilterLastK.h\
+        $$CORE_HEADERS
 
-    FORMS     += ui/mainwindow.ui
+    FORMS += \
+        ui/mainwindow.ui \
+        ui/analysiswindow.ui
+
     RESOURCES += resources.qrc
 }
+
+HEADERS += \
+    core/loghandler.h \
+    ui/FilterLastK.h \
+    ui/aboutdialog.h \
+    ui/splashdialog.h
+
+FORMS += \
+    ui/aboutdialog.ui \
+    ui/splashdialog.ui
+
+SOURCES += \
+    core/loghandler.cpp \
+    ui/aboutdialog.cpp \
+    ui/splashdialog.cpp

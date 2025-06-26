@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AboutDialog</class>
+ <widget class="QDialog" name="AboutDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>400</width>
+    <height>300</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>400</width>
+    <height>300</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>О Программе...</string>
+  </property>
+  <property name="windowIcon">
+   <iconset theme="QIcon::ThemeIcon::HelpFaq"/>
+  </property>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>401</width>
+     <height>301</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>&lt;h3&gt;Метод Монте-Карло&lt;/h3&gt;
+Площадь сегмента окружности&lt;br&gt;&lt;br&gt;
+&lt;b&gt;Автор:&lt;/b&gt; Беспалов Тимофей, гр. ИСП 304&lt;br&gt;
+&lt;b&gt;Вариант:&lt;/b&gt; № 1&lt;br&gt;
+&lt;b&gt;Версия:&lt;/b&gt; 1.0 (26 июн 2025)&lt;br&gt;
+&lt;a href=&quot;https://github.com/kPod42/vpso&quot;&gt;GitHub проекта&lt;/a&gt;&lt;br&gt;
+&lt;small&gt;Только для учебных целей.&lt;/small&gt;</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QDialogButtonBox" name="buttonBox">
+      <property name="standardButtons">
+       <set>QDialogButtonBox::StandardButton::Close</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

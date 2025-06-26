@@ -2,4 +2,7 @@
     <qresource prefix="/databaseScripts/sql">
         <file alias="init.sql">data/sql/init.sql</file>
     </qresource>
+    <qresource prefix="/icons">
+        <file>icon/icon.png</file>
+    </qresource>
 </RCC>

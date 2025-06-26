@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "qsqlerror.h"
+#include "ui/aboutdialog.h"
 #include "ui_mainwindow.h"
 #include "data/databasemanager.h"
 
@@ -15,6 +16,23 @@ MainWindow::MainWindow(QWidget *parent)
     initPlot();   // создаём circle, lim, gHits, gMisses
     buildFrame(); // первый «пустой» кадр
     repo = std::make_unique<ExperimentRepository>();
+
+    auto *menuView   = menuBar()->addMenu(tr("Вид"));
+
+    /* 1. Анализ… */
+    QAction *actAnalysis = menuView->addAction(tr("Анализ…"));
+    actAnalysis->setShortcut(QKeySequence("Ctrl+Shift+A"));
+    connect(actAnalysis, &QAction::triggered,
+            this,        &MainWindow::openAnalysis);
+
+    /* 2. О программе…   ─ новый пункт ─ */
+    QAction *actAbout = menuView->addAction(tr("О программе…"));
+    actAbout->setShortcut(QKeySequence("F1"));           // (опционально)
+    connect(actAbout, &QAction::triggered,
+            this,     &MainWindow::openAbout);           // ← слот ниже
+
+    connect(actAnalysis, &QAction::triggered,
+            this,        &MainWindow::openAnalysis);   // <- слот ниже
 }
 
 /* ──────────── initPlot ──────────── */
@@ -148,4 +166,25 @@ void MainWindow::on_btnStart_clicked()
     runSimulation();
 }
 
-MainWindow::~MainWindow() { delete ui; }
+/* слот, который открывает/поднимает окно анализа */
+void MainWindow::openAnalysis()
+{
+    static AnalysisWindow *w = nullptr;
+    if (!w) w = new AnalysisWindow(this);
+
+    w->show();
+    w->raise();
+    w->activateWindow();
+}
+
+void MainWindow::openAbout()
+{
+    static AboutDialog dlg(this);   // создаём один раз
+    dlg.exec();                     // модально
+}
+
+MainWindow::~MainWindow()
+{
+    /* analysisWnd уничтожится автоматически вместе с unique_ptr */
+    delete ui;
+}

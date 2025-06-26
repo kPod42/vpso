@@ -5,6 +5,7 @@
 #include "../3rdparty/qcustomplot.h"                 // ← путь ищется через INCLUDEPATH
 #include "core/SegmentMonteCarlo.h"
 #include "data/experimentrepository.h"
+#include "ui/analysiswindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -20,6 +21,8 @@ public:
 
 private slots:
     void on_btnStart_clicked();
+    void openAbout();
+    void openAnalysis();
 
 private:
     /* ---- авто-сгенерённое UI ---- */
@@ -28,6 +31,7 @@ private:
     /* ---- Monte-Carlo модель ---- */
     SegmentMonteCarlo::Params               mcParams;
     std::unique_ptr<SegmentMonteCarlo>      mc;
+    std::unique_ptr<AnalysisWindow> analysisWnd;   // ③ хранитель окна
 
     /* ---- элементы QCustomPlot ---- */
     QCPGraph     *gHits   = nullptr;

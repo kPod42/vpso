@@ -17,10 +17,13 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string/>
+  </property>
+  <property name="windowIcon">
+   <iconset theme="accessories-calculator"/>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>31</x>
@@ -104,11 +107,14 @@
        </item>
        <item row="3" column="0">
         <widget class="QDoubleSpinBox" name="sbR">
+         <property name="decimals">
+          <number>2</number>
+         </property>
          <property name="minimum">
           <double>0.100000000000000</double>
          </property>
          <property name="singleStep">
-          <double>0.100000000000000</double>
+          <double>1.000000000000000</double>
          </property>
          <property name="value">
           <double>1.000000000000000</double>
