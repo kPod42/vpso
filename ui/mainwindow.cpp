@@ -27,13 +27,46 @@ MainWindow::MainWindow(QWidget *parent)
 
     /* 2. О программе…   ─ новый пункт ─ */
     QAction *actAbout = menuView->addAction(tr("О программе…"));
-    actAbout->setShortcut(QKeySequence("F1"));           // (опционально)
+    actAbout->setShortcut(QKeySequence("F2"));           // (опционально)
+
+    auto *menuHelp = menuBar()->addMenu(tr("Справка"));
+    QAction *actHelp = menuHelp->addAction(tr("Содержание…"));
+    actHelp->setShortcut(QKeySequence::HelpContents);   // F1
+
     connect(actAbout, &QAction::triggered,
             this,     &MainWindow::openAbout);           // ← слот ниже
 
     connect(actAnalysis, &QAction::triggered,
             this,        &MainWindow::openAnalysis);   // <- слот ниже
+
+    connect(actHelp, &QAction::triggered,
+            this,     &MainWindow::openHelp);
 }
+
+/* расчет аналитической площади */
+namespace {
+
+double analyticSegmentArea(const SegmentMonteCarlo::Params &p)
+{
+    const double R = p.R;
+
+    /* 1. расстояние от центра до прямой */
+    const double d = (p.o == SegmentMonteCarlo::Vertical)
+                         ? std::abs(p.C - p.x0)   // вертикаль: x = C
+                         : std::abs(p.C - p.y0);  // горизонталь: y = C
+
+    /* 2. касательная (d >= R) → сегмент = весь круг */
+    if (d >= R)
+        return M_PI * R * R;
+
+    /* 3. «малый колпачок» */
+    const double cap = R*R*std::acos(d/R) - d*std::sqrt(R*R - d*d);
+
+    /* 4. наш сегмент — большая часть круга */
+    return M_PI * R * R - cap;
+}
+
+} // namespace
 
 /* ──────────── initPlot ──────────── */
 void MainWindow::initPlot()
@@ -74,21 +107,28 @@ void MainWindow::initPlot()
 void MainWindow::runSimulation()
 {
     mc = std::make_unique<SegmentMonteCarlo>(mcParams);
-    const double area = mc->run();
 
-    drawScene();
-    ui->edtS->setText(tr("S ≈ %1").arg(area, 0, 'g', 10));
+    const double sStochastic = mc->run();                       // Монте-Карло
+    const double sAnalytic   = analyticSegmentArea(mcParams);   // формула
 
-    /* ---------- сохраняем результат ---------- */
+    const double err = std::abs(sStochastic - sAnalytic);
+
+    /* выводим обе величины */
+    ui->edtS->setText(
+        tr("%1 / %2")
+            .arg(sAnalytic,    0,'g',10)
+            .arg(sStochastic , 0,'g',10) );
+
+    /* если сохраняете в БД — обновите Experiment  */
     Experiment e;
     e.params = mcParams;
-    e.S_est  = area;
-    e.error  = 0;                      // если нет аналита – 0
-    e.ts     = QDateTime::currentDateTime();
+    e.S_est  = sStochastic;
+    e.error  = err;
+    repo->insert(e);
 
-    if (!repo->insert(e))
-        qWarning() << "DB insert error:" << DatabaseManager::db().lastError();
+    drawScene();          // перерисуем окружность и точки
 }
+
 
 /* ──────────── построение окружности + линии ──────────── */
 void MainWindow::buildFrame()
@@ -181,6 +221,13 @@ void MainWindow::openAbout()
 {
     static AboutDialog dlg(this);   // создаём один раз
     dlg.exec();                     // модально
+}
+
+void MainWindow::openHelp()
+{
+    QString path = QDir(QCoreApplication::applicationDirPath())
+    .filePath("help/index.htm");         // ...\vpso\help\index.htm
+    QDesktopServices::openUrl(QUrl::fromLocalFile(path));
 }
 
 MainWindow::~MainWindow()

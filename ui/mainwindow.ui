@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>880</width>
-    <height>495</height>
+    <width>921</width>
+    <height>512</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -28,8 +28,8 @@
      <rect>
       <x>31</x>
       <y>12</y>
-      <width>841</width>
-      <height>461</height>
+      <width>881</width>
+      <height>491</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
@@ -84,7 +84,7 @@
           </size>
          </property>
          <property name="text">
-          <string>S</string>
+          <string>S (аналит./стохост.)</string>
          </property>
         </widget>
        </item>

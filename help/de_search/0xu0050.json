@@ -1,0 +1,10 @@
+[
+	{ "s": "PARAMETER", "p": [22] },
+	{ "s": "PLATFORM", "p": [23] },
+	{ "s": "PLATFORMS", "p": [15, 13] },
+	{ "s": "PLATFORMS/QWINDOWS", "p": [13] },
+	{ "s": "PLUGIN", "p": [23] },
+	{ "s": "PLUGINS", "p": [23, 15, 13] },
+	{ "s": "PLUGINS\\PLATFORMS", "p": [15] },
+	{ "s": "PROGRAM", "p": [14] }
+]

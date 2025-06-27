@@ -23,6 +23,7 @@ private slots:
     void on_btnStart_clicked();
     void openAbout();
     void openAnalysis();
+    void openHelp();
 
 private:
     /* ---- авто-сгенерённое UI ---- */

@@ -1,0 +1,10 @@
+[
+	{ "s": "AMD", "p": [11] },
+	{ "s": "ANTIALIAS", "p": [23] },
+	{ "s": "APPDATA", "p": [23, 15] },
+	{ "s": "APPDATA%\\MYLAB\\VPSO", "p": [15] },
+	{ "s": "APPDATA%\\MYLAB\\VPSO\\EXPERIMENTS.DB", "p": [23] },
+	{ "s": "APPLICATION", "p": [23] },
+	{ "s": "APPS", "p": [14] },
+	{ "s": "ARCCOS", "p": [26] }
+]
